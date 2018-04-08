@@ -63,9 +63,9 @@ public class UserTest {
 		SqlSession session = null;
 		try {
 			session = MyBatisUtil.createSession();
-			list = session.selectList("cn.tree.smbms.dao.user.UserMapper.getUserList");
+			//list = session.selectList("cn.tree.smbms.dao.user.UserMapper.getUserList");
 			//
-			//list = session.getMapper(UserMapper.class);
+			list = session.getMapper(UserMapper.class).getUserList();
 			for (User user : list) {
 				logger.debug("username\t\t"+user.getUserName());
 			}
