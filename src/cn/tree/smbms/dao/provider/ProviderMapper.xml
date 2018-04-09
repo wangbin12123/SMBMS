@@ -6,4 +6,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="count" resultType="int">
 		SELECT COUNT(1) AS COUNT FROM smbms_provider
 	</select>
+	<!-- 查询供应商列表 -->
+	<select id="getProviderList" resultType="cn.three.smbms.pojo.provider">
+		SELECT proName FROM smbms_provider
+	</select>
 </mapper>
