@@ -2,12 +2,12 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.tree.smbms.dao.provider.ProviderMapper">
+<mapper namespace="cn.three.smbms.dao.provider.ProviderMapper">
 	<select id="count" resultType="int">
 		SELECT COUNT(1) AS COUNT FROM smbms_provider
 	</select>
 	<!-- 查询供应商列表 -->
-	<select id="getProviderList" resultType="cn.three.smbms.pojo.provider">
+	<select id="getProviderList" resultType="Provider">
 		SELECT proName FROM smbms_provider
 	</select>
 </mapper>

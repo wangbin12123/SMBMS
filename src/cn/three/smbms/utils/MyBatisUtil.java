@@ -1,4 +1,4 @@
-package cn.tree.smbms.utils;
+package cn.three.smbms.utils;
 
 import java.io.InputStream;
 

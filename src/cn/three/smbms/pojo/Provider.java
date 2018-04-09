@@ -7,7 +7,7 @@ import java.util.Date;
  * @author bin
  *
  */
-public class provider {
+public class Provider {
 	private BigInteger id;//主键ID
 	private String proCode;//供应商编码
 	private String proName;//供应商名称

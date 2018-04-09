@@ -21,7 +21,14 @@ public class User {
 	private Date creationDate;//创建时间
 	private BigInteger modifyBy;//更新者
 	private Date modifyDate;//更新时间
+	private String userRoleName;//用户角色名
 	
+	public String getUserRoleName() {
+		return userRoleName;
+	}
+	public void setUserRoleName(String userRoleName) {
+		this.userRoleName = userRoleName;
+	}
 	public BigInteger getId() {
 		return id;
 	}

@@ -8,7 +8,7 @@ import java.util.Date;
  * @author bin
  *
  */
-public class bill {
+public class Bill {
 	private BigInteger id;//主键ID
 	private String billCode;//账单编码
 	private String productName;//商品名称
@@ -22,6 +22,7 @@ public class bill {
 	private BigInteger modifyBy;//更新者
 	private Date modifyDate;//更新时间
 	private Integer providerId;//供应商ID
+	private String providerName;//供应商名字
 	
 	public BigInteger getId() {
 		return id;
@@ -101,6 +102,13 @@ public class bill {
 	}
 	public void setProviderId(Integer providerId) {
 		this.providerId = providerId;
+	}
+	
+	public String getProviderName() {
+		return providerName;
+	}
+	public void setProviderName(String providerName) {
+		this.providerName = providerName;
 	}
 	
 }

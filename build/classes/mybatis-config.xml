@@ -5,10 +5,15 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 <configuration>
 	<!-- 引入资源文件 -->
 	<properties resource="database.properties"></properties>
+	<!-- 加载文件 -->
 	<settings>
 		<!-- 配置log实现为LOG4J -->
 		<setting name="logImpl" value="LOG4J"></setting>
 	</settings>
+	<typeAliases>
+		<!--  <typeAlias type="cn.three.smbms.pojo.User" alias="User"/> -->
+		 <package name="cn.three.smbms.pojo"/> 
+	</typeAliases>
 	<environments default="development">
 		<environment id="development">
 			<!-- 事务管理 -->
@@ -20,16 +25,21 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 				<property name="username">root</property>
 				<property name="password">123456</property>
 			</dataSource>-->
+			<!-- 外部引入式 -->
 			<dataSource type="POOLED">
 				<property name="driver" value="${driver}"></property>
 				<property name="url" value="${url}"></property>
 				<property name="username" value="${user}"></property>
 				<property name="password" value="${password}"></property>
-			</dataSource>
+			</dataSource> 
 		</environment>
 	</environments>
+	<!-- 映射器 -->
 	<mappers>
-		<mapper resource="cn/tree/smbms/dao/user/UserMapper.xml"/>
-		<mapper resource="cn/tree/smbms/dao/provider/ProviderMapper.xml"/>
+		<mapper resource="cn/three/smbms/dao/user/UserMapper.xml"/>
+		<!-- <mapper url="file:///C:/Users/bin/workspace1/SMBMS/src/cn/tree/smbms/dao/user/UserMapper.xml"></mapper> -->
+		<!-- <mapper class="cn.tree.smbms.dao.user.UserMapper"/> --> 
+		<mapper resource="cn/three/smbms/dao/provider/ProviderMapper.xml"/>
+		<mapper resource="cn/three/smbms/dao/bill/BillMapper.xml"/>
 	</mappers>
 </configuration>

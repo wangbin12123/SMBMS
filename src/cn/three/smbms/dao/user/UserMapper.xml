@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.three.smbms.dao.user.UserMapper">
+	<select id="count" resultType="int">
+		SELECT COUNT(1) AS COUNT FROM smbms_user
+	</select>
+	<resultMap type="User" id="userList">
+		<result property="id" column="id"></result>
+		<result property="userCode" column="userCode"></result>
+		<result property="userName" column="userName"></result>
+		<result property="userRole" column="userRole"></result>
+		<result property="userRoleName" column="roleName"></result>
+	</resultMap>
+	<!-- 查询用户列表 -->
+	<select id="getUserList" resultType="User">
+		select userName  from smbms_user;
+	</select>
+	<!-- 根据用户名查询用户列表 -->
+	<select id="getUserListByName" resultType="User" parameterType="String">
+		select userName from smbms_user where userName like CONCAT('%',#{name},'%')
+	</select>
+	<!-- 根据用户名查询userRole=1 -->
+	<select id="getUserRole" resultType="User" parameterType="int">
+		select * from smbms_user where userRole=#{id}
+	</select>
+	<!-- 多条件查询用户列表 -->
+	<select id="getUserListByMap" resultType="User" parameterType="Map">
+		SELECT * FROM smbms_user WHERE userName LIKE CONCAT('%',#{name},'%') AND userRole=#{role}
+	</select>
+	<!-- 实体类查询用户列表 -->
+	<select id="getUserListByMap2" resultType="User" parameterType="map">
+		SELECT * FROM smbms_user WHERE userName LIKE CONCAT('%',#{userName},'%') AND userRole=#{userRole}
+	</select>
+	<select id="getUserList2" resultMap="userList" parameterType="User">
+		SELECT u.*,r.roleName FROM smbms_user u,smbms_role r WHERE u.userName LIKE CONCAT('%',#{userName},'%') AND u.userRole=#{userRole} AND u.userRole=r.id
+	</select>
+</mapper>

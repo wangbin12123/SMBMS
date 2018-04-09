@@ -13,14 +13,14 @@ import org.apache.log4j.Logger;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import cn.three.smbms.pojo.provider;
-import cn.tree.smbms.dao.provider.ProviderMapper;
-import cn.tree.smbms.utils.MyBatisUtil;
+import cn.three.smbms.dao.provider.ProviderMapper;
+import cn.three.smbms.pojo.Provider;
+import cn.three.smbms.utils.MyBatisUtil;
 
 
 
-public class ProviderMapperTest {
-	private Logger logger = Logger.getLogger(ProviderMapperTest.class);
+public class ProviderTest {
+	private Logger logger = Logger.getLogger(ProviderTest.class);
 	@Ignore
 	@Test
 	public void TestCount() {
@@ -45,13 +45,13 @@ public class ProviderMapperTest {
 	}
 	@Test
 	public void TestProName() {
-		List<provider> list = new ArrayList<provider>();
+		List<Provider> list = new ArrayList<Provider>();
 		SqlSession session = null;
 		try {
 			session = MyBatisUtil.createSession();
 			//list = session.selectList("cn.tree.smbms.dao.provider.ProviderMapper.getProviderList");
 			list = session.getMapper(ProviderMapper.class).getProviderList();
-			for (provider provider : list) {
+			for (Provider provider : list) {
 				logger.debug("proName\t"+provider.getProName());
 			}
 		}catch(Exception e) {
