@@ -8,7 +8,7 @@ import java.util.Date;
  *
  */
 public class User {
-	private BigInteger id;//主键ID
+	private Integer id;//主键ID
 	private String userCode;//用户编码
 	private String userName;//用户名称
 	private String userPassword;//用户密码
@@ -17,9 +17,9 @@ public class User {
 	private String phone;//手机
 	private String address;//地址
 	private Integer userRole;//用户角色（取自角色表-角色id）
-	private BigInteger createdBy;//创建者
+	private Integer createdBy;//创建者
 	private Date creationDate;//创建时间
-	private BigInteger modifyBy;//更新者
+	private Integer modifyBy;//更新者
 	private Date modifyDate;//更新时间
 	private String userRoleName;//用户角色名
 	
@@ -29,10 +29,11 @@ public class User {
 	public void setUserRoleName(String userRoleName) {
 		this.userRoleName = userRoleName;
 	}
-	public BigInteger getId() {
+	
+	public Integer getId() {
 		return id;
 	}
-	public void setId(BigInteger id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public String getUserCode() {
@@ -84,22 +85,23 @@ public class User {
 		this.userRole = userRole;
 	}
 	
-	public BigInteger getCreatedBy() {
-		return createdBy;
-	}
-	public void setCreatedBy(BigInteger createdBy) {
-		this.createdBy = createdBy;
-	}
 	public Date getCreationDate() {
 		return creationDate;
 	}
 	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
 	}
-	public BigInteger getModifyBy() {
+	
+	public Integer getCreatedBy() {
+		return createdBy;
+	}
+	public void setCreatedBy(Integer createdBy) {
+		this.createdBy = createdBy;
+	}
+	public Integer getModifyBy() {
 		return modifyBy;
 	}
-	public void setModifyBy(BigInteger modifyBy) {
+	public void setModifyBy(Integer modifyBy) {
 		this.modifyBy = modifyBy;
 	}
 	public Date getModifyDate() {

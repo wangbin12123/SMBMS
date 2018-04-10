@@ -10,4 +10,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getProviderList" resultType="Provider">
 		SELECT proName FROM smbms_provider
 	</select>
+	<insert id="insert1" parameterType="Provider">
+		INSERT INTO smbms_provider(proCode,proName,proDesc,createdBy,creationDate)
+		 VALUES(#{proCode},#{proName},#{proDesc},#{createdBy},#{creationDate});
+	</insert>
+	<update id="update1" parameterType="Provider">
+		UPDATE smbms_provider 
+		SET proCode=#{proCode},proName=#{proName},proDesc=#{proDesc},modifyBy=#{modifyBy},modifyDate=#{modifyDate} WHERE id=#{id};
+	</update>
+	<delete id="delete1" parameterType="Provider">
+		delete from smbms_provider where id=#{id}
+	</delete>
+	<!-- 使用注解传参 -->
+	<insert id="insert2" parameterType="Provider">
+		INSERT INTO smbms_provider(proCode,proName,proDesc,createdBy,creationDate)
+		 VALUES(#{proCode},#{proName},#{proDesc},#{createdBy},#{creationDate});
+	</insert>
 </mapper>

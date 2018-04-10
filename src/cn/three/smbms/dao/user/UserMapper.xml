@@ -33,7 +33,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getUserListByMap2" resultType="User" parameterType="map">
 		SELECT * FROM smbms_user WHERE userName LIKE CONCAT('%',#{userName},'%') AND userRole=#{userRole}
 	</select>
+	<!-- 结果集查询用户列表 -->
 	<select id="getUserList2" resultMap="userList" parameterType="User">
 		SELECT u.*,r.roleName FROM smbms_user u,smbms_role r WHERE u.userName LIKE CONCAT('%',#{userName},'%') AND u.userRole=#{userRole} AND u.userRole=r.id
 	</select>
+	<!-- 增加用户列表 -->
+	<insert  id="add" parameterType="User" >
+		insert into  smbms_user (userCode,userName,userPassword,gender,birthday,phone,address,userRole,createdBy,creationDate,modifyBy,modifyDate) 
+		values (#{userCode},#{userName},#{userPassword},#{gender},#{birthday},#{phone},#{address},#{userRole},#{createdBy},#{creationDate},#{modifyBy},#{modifyDate})
+	</insert>
+	<!-- 更新用户列表 -->
+	<update id ="modify" parameterType="User">
+		update smbms_user set userCode = #{userCode},
+	    userName = #{userName},
+        userPassword = #{userPassword}  where id = #{id}
+	</update>
+	<!-- 使用注解传参 -->
+	<update id ="updatePwd">
+		update smbms_user set 
+        userPassword = #{userPassword}  where id = #{id}
+	</update>
+	<!-- 删除用户 -->
+	<delete id ="deleteUserById" parameterType="int">
+		delete from smbms_user where id = #{id}
+	</delete>
+	
+
 </mapper>
