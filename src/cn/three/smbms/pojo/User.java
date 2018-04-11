@@ -1,6 +1,5 @@
 package cn.three.smbms.pojo;
 
-import java.math.BigInteger;
 import java.util.Date;
 /**
  * 用户表
@@ -22,7 +21,15 @@ public class User {
 	private Integer modifyBy;//更新者
 	private Date modifyDate;//更新时间
 	private String userRoleName;//用户角色名
+	private Role role;//角色对象
 	
+	
+	public Role getRole() {
+		return role;
+	}
+	public void setRole(Role role) {
+		this.role = role;
+	}
 	public String getUserRoleName() {
 		return userRoleName;
 	}

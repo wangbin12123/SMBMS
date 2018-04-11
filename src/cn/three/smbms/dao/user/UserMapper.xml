@@ -13,6 +13,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="userRole" column="userRole"></result>
 		<result property="userRoleName" column="roleName"></result>
 	</resultMap>
+	<!-- 一对一 -->
+	<resultMap type="User" id="userRoleList">
+		<id property="id" column="id"/>
+		<result property="userCode" column="userCode"/>
+		<result property="userName" column="userName"/>
+		<result property="userRole" column="userRole"></result>
+		<association property="role" javaType="Role"><!-- Role用了别名 -->
+			<id property="id" column="r_id"/>
+			<result property="roleCode" column="roleCode"/>
+			<result property="roleName" column="roleName"/>
+		</association>
+	</resultMap>
 	<!-- 查询用户列表 -->
 	<select id="getUserList" resultType="User">
 		select userName  from smbms_user;
@@ -35,7 +47,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	<!-- 结果集查询用户列表 -->
 	<select id="getUserList2" resultMap="userList" parameterType="User">
-		SELECT u.*,r.roleName FROM smbms_user u,smbms_role r WHERE u.userName LIKE CONCAT('%',#{userName},'%') AND u.userRole=#{userRole} AND u.userRole=r.id
+		SELECT u.*,r.roleName FROM smbms_user u,smbms_role r 
+		WHERE u.userName LIKE CONCAT('%',#{userName},'%') AND u.userRole=#{userRole} AND u.userRole=r.id
 	</select>
 	<!-- 增加用户列表 -->
 	<insert  id="add" parameterType="User" >
@@ -57,6 +70,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<delete id ="deleteUserById" parameterType="int">
 		delete from smbms_user where id = #{id}
 	</delete>
-	
-
+	<!-- 一对一关系映射 -->
+	<select id="getUserListByRole" parameterType="int" resultMap="userRoleList">
+		SELECT u.*,r.id AS r_id,r.roleName,r.roleCode 
+		FROM smbms_user u,smbms_role r WHERE u.userRole=#{userRole} AND u.userRole=r.id
+	</select>
 </mapper>

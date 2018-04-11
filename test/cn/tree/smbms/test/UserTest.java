@@ -285,4 +285,26 @@ public class UserTest {
 			session.rollback();
 		}
 	}
+	@Test
+	//一对一测试
+	public void TestList11() {
+		List<User> list = new ArrayList<User>();
+		SqlSession session = null;
+		try {
+			session = MyBatisUtil.createSession();
+			Integer roleid =2;
+			//list = session.selectList("cn.three.smbms.dao.user.UserMapper.getUserListByRole",roleid);
+			//使用接口方式实现查询
+			list = session.getMapper(UserMapper.class).getUserListByRole(roleid);
+			session.commit();
+			for (User user2 : list) {
+				logger.debug("userCode\t"+user2.getUserCode()+"\tuserName\t"+user2.getUserName()+"\tuserRole\t"+user2.getUserRole()+"\troleName\t"+user2.getRole().getRoleName()+"\t角色编码"+user2.getRole().getRoleCode());
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			MyBatisUtil.closeSession(session);
+			session.rollback();
+		}
+	}
 }

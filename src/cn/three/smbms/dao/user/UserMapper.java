@@ -22,4 +22,6 @@ public interface UserMapper {
 	//修改用户密码
 	public int updatePwd(@Param("id")Integer id,@Param("userPassword")String userPassword);
 	public int deleteUserById(Integer id);
+	//一对一
+	public List<User> getUserListByRole(Integer roleid);
 }

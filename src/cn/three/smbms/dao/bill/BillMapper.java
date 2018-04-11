@@ -6,4 +6,5 @@ import cn.three.smbms.pojo.Bill;
 
 public interface BillMapper {
 	public List<Bill> getBillList(Bill bill);
+	public List<Bill> getBillProviderList(Bill bill);
 }

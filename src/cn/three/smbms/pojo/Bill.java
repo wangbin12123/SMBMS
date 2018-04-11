@@ -23,7 +23,22 @@ public class Bill {
 	private Date modifyDate;//更新时间
 	private Integer providerId;//供应商ID
 	private String providerName;//供应商名字
+	private Provider provider;
+	private String proCode;
 	
+	
+	public String getProCode() {
+		return proCode;
+	}
+	public void setProCode(String proCode) {
+		this.proCode = proCode;
+	}
+	public Provider getProvider() {
+		return provider;
+	}
+	public void setProvider(Provider provider) {
+		this.provider = provider;
+	}
 	public BigInteger getId() {
 		return id;
 	}

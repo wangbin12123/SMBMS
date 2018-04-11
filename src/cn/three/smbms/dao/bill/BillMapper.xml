@@ -11,9 +11,38 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="creationDate" column="creationDate"/>
 		<result property="providerName" column="proName"/>
 	</resultMap>
+	<resultMap type="Provider" id="test">
+			<id property="id" column="p_id"/>
+			<result property="proCode" column="proCode"/>
+			<result property="proName" column="proName"/>
+			<result property="proContact" column="proContact"/>
+			<result property="proPhone" column="proPhone"/>
+	</resultMap>
+	<!-- 一对一 -->
+	<resultMap type="Bill" id="BillProviderList">
+	 	<id property="id" column="id"/>
+		<result property="billCode" column="billCode"/>
+		<result property="productName" column="productName"/>
+		<result property="productCount" column="productCount"/>
+		<result property="isPayment" column="isPayment"/>
+		<result property="creationDate" column="creationDate"/>
+		<association property="provider" javaType="Provider" resultMap="test"><!-- Role用了别名 -->
+			<!-- <id property="id" column="p_id"/>
+			<result property="proCode" column="proCode"/>
+			<result property="proName" column="proName"/>
+			<result property="proContact" column="proContact"/>
+			<result property="proPhone" column="proPhone"/> -->
+		</association>
+	</resultMap>
 	<select id="getBillList" resultMap="BillList" parameterType="Bill">
 		SELECT b.billCode,b.productName,p.proName,b.productCount,b.isPayment,b.creationDate
  		FROM smbms_bill b,smbms_provider p 
  		WHERE b.productName LIKE CONCAT('%',#{productName},'%') AND b.providerId=p.id AND b.isPayment=#{isPayment} And b.providerId=#{providerId};
+	</select>
+	<!-- 一对一查询 -->
+	<select id="getBillProviderList" parameterType="Bill" resultMap="BillProviderList">
+		SELECT b.id,b.billCode,b.productName,b.productCount,b.isPayment,b.creationDate,p.id as p_id,p.proCode,p.proName,p.proContact,p.proPhone
+		FROM smbms_bill b,smbms_provider p
+		WHERE b.providerId = p.id AND b.productName LIKE CONCAT('%',#{productName},'%') AND b.providerId=#{providerId} AND b.isPayment=#{isPayment};
 	</select>
 </mapper>

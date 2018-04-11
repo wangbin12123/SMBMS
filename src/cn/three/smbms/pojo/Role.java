@@ -15,6 +15,7 @@ public class Role {
 	private Date creationDate;//创建时间
 	private BigInteger modifyBy;//修改者
 	private Date modifyDate;//修改时间
+	
 	public BigInteger getId() {
 		return id;
 	}
@@ -35,7 +36,7 @@ public class Role {
 	}
 	public BigInteger getCreatedBy() {
 		return createdBy;
-	}
+	} 
 	public void setCreatedBy(BigInteger createdBy) {
 		this.createdBy = createdBy;
 	}
