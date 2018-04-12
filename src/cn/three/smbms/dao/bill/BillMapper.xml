@@ -26,6 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="productCount" column="productCount"/>
 		<result property="isPayment" column="isPayment"/>
 		<result property="creationDate" column="creationDate"/>
+		<result property="totalPrice" column="totalPrice"/>
 		<association property="provider" javaType="Provider" resultMap="test"><!-- Role用了别名 -->
 			<!-- <id property="id" column="p_id"/>
 			<result property="proCode" column="proCode"/>
@@ -45,4 +46,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		FROM smbms_bill b,smbms_provider p
 		WHERE b.providerId = p.id AND b.productName LIKE CONCAT('%',#{productName},'%') AND b.providerId=#{providerId} AND b.isPayment=#{isPayment};
 	</select>
+	<!-- if查询 -->
+	<select id="getBillList2"  resultMap="BillProviderList">
+		SELECT b.id,b.billCode,b.productName,b.providerId,b.totalPrice,b.isPayment,b.creationDate,p.proName,p.id as p_id FROM smbms_bill b,
+		smbms_provider p
+		 WHERE b.providerId = p.id
+		 <if test="productName!=null and productName !=''">
+		 	And b.productName LIKE CONCAT('%',#{productName},'%')	
+		 </if>
+		  <if test="providerId!=null and providerId!=''">
+		  	AND b.providerId=#{providerId}
+		  </if>
+		  <if test="isPayment!=null and isPayment!=''">
+		  	AND b.isPayment=#{isPayment}
+		  </if>
+	</select>
+	<insert id="insert1" parameterType="Provider">
+		INSERT INTO smbms_provider(proCode,proName,proDesc,createdBy,creationDate)
+		 VALUES(#{proCode},#{proName},#{proDesc},#{createdBy},#{creationDate});
+	</insert>
+	
+	
 </mapper>

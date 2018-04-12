@@ -1,6 +1,7 @@
 package cn.three.smbms.pojo;
 
 import java.util.Date;
+import java.util.List;
 /**
  * 用户表
  * @author bin
@@ -22,8 +23,15 @@ public class User {
 	private Date modifyDate;//更新时间
 	private String userRoleName;//用户角色名
 	private Role role;//角色对象
+	private List<Address> addressList;//地址列表
 	
 	
+	public List<Address> getAddressList() {
+		return addressList;
+	}
+	public void setAddressList(List<Address> addressList) {
+		this.addressList = addressList;
+	}
 	public Role getRole() {
 		return role;
 	}

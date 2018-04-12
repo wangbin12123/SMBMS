@@ -64,4 +64,31 @@ public class BillTest {
 			MyBatisUtil.closeSession(session);
 		}
 	}
+	@Test
+	public void TestBillProviderList2() {
+		List<Bill> list = new ArrayList<>();
+		SqlSession session = null;
+		try {
+			session = MyBatisUtil.createSession();
+			String productName = "米";
+			Integer providerId = 3;
+			Integer isPayment = 2;
+			list = session.getMapper(BillMapper.class).getBillList2(productName, providerId, isPayment);
+			for (Bill b : list) {
+				logger.debug(
+				"\n订单id"+b.getId()+"\t"+"\n订单编码\t"+b.getBillCode()+"\n"
+				+"商品名称\t"+b.getProductName()+"\n"
+				+"供应商id\t"+b.getProvider().getId()+"\n"
+				+"供应商名称\t"+b.getProvider().getProName()+"\n"
+				+"订单金额\t"+b.getTotalPrice()+"\n"
+				+"是否支付\t"+b.getIsPayment()+"\n"
+				+"创建时间\t"+b.getCreationDate()+"\n"
+				);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			MyBatisUtil.closeSession(session);
+		}
+	}
 }

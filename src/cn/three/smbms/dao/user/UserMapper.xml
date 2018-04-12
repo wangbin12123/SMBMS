@@ -25,6 +25,55 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<result property="roleName" column="roleName"/>
 		</association>
 	</resultMap>
+	<resultMap type="Address" id="addressList">
+		<id property="id" column="a_id"/>
+		<result property="postCode" column="postCode"></result>
+		<result property="contact" column="contact"></result>
+		<result property="addressDesc" column="addressDesc"></result>
+		<result property="tel" column="tel"></result>
+	</resultMap>
+	<!-- 一对多的关系映射 -->
+	<resultMap type="User" id="userAddressList">
+		<id property="id" column="id"/>
+		<result property="userCode" column="userCode"/>
+		<result property="userName" column="userName"/>
+		<collection property="addressList" ofType="Address" resultMap="addressList">
+			<!-- <id property="id" column="a_id"/>
+				<result property="postCode" column="postCode"></result>
+				<result property="contact" column="contact"></result>
+				<result property="addressDesc" column="addressDesc"></result>
+				<result property="tel" column="tel"></result> -->
+		</collection>
+	</resultMap>
+	<!-- foreach -->
+	<resultMap type="User" id="userRole">
+		<result property="id" column="id"></result>
+		<result property="userCode" column="userCode"></result>
+		<result property="userName" column="userName"></result>
+	</resultMap>
+	<!-- foreach -->
+	<select id="getUserListByRole_array" resultMap="userRole">
+		SELECT * FROM smbms_user where userRole in
+		<foreach collection="array" item="roleIds" open="(" separator="," close=")">
+			#{roleIds}
+		</foreach>
+	</select>
+	<select id="getUserListByRole_list" resultMap="userRole">
+		SELECT * FROM smbms_user where userRole in
+		<foreach collection="list" item="roleIds" open="(" separator="," close=")">
+			#{roleIds}
+		</foreach>
+	</select>
+		<select id="getUserListByRole_map" resultMap="userRole">
+		SELECT * FROM smbms_user where gender=#{gender} and userRole in
+		<foreach collection="roleList" item="roleIds" open="(" separator="," close=")">
+			#{roleIds}
+		</foreach>
+	</select>
+	<!-- 一对多映射 -->
+	<select id="getAddressListByUser" resultMap="userAddressList" parameterType="int">
+		SELECT u.*,a.id a_id,a.postCode,a.contact,a.addressDesc,a.tel FROM smbms_user u LEFT JOIN smbms_address a ON u.id=a.userId WHERE u.id=#{userId};
+	</select>
 	<!-- 查询用户列表 -->
 	<select id="getUserList" resultType="User">
 		select userName  from smbms_user;
@@ -61,6 +110,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	    userName = #{userName},
         userPassword = #{userPassword}  where id = #{id}
 	</update>
+	<update id ="modify2" parameterType="User">
+		update smbms_user
+		<set>
+			<if test="userCode!=null">userCode = #{userCode},</if>
+			<if test="userName!=null">userName = #{userName},</if>
+			<if test="userPassword!=null">userPassword = #{userPassword}</if>
+		</set>
+         where id = #{id}
+	</update>
+	<!-- 去除多余的关键字 -->
+	<update id ="modify3" parameterType="User">
+		update smbms_user
+		<trim suffix="where id = #{id}" prefix="set" prefixOverrides="" suffixOverrides=",">
+			<if test="userCode!=null">userCode = #{userCode},</if>
+			<if test="userName!=null">userName = #{userName},</if>
+			<if test="userPassword!=null">userPassword = #{userPassword}</if>
+		</trim>
+	</update>
 	<!-- 使用注解传参 -->
 	<update id ="updatePwd">
 		update smbms_user set 
@@ -75,4 +142,39 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT u.*,r.id AS r_id,r.roleName,r.roleCode 
 		FROM smbms_user u,smbms_role r WHERE u.userRole=#{userRole} AND u.userRole=r.id
 	</select>
+	<!-- 多条件查询用户列表 -->
+	<select id="getUserList3" resultType="User">
+		SELECT * FROM smbms_user u,
+		smbms_role r
+		 WHERE u.userRole = r.id
+		 <if test="userName!=null and userName !=''">
+		 And u.userName LIKE CONCAT('%',#{userName},'%')	
+		 </if>
+		  <if test="userRole!=null">
+		  		AND u.userRole=#{userRole}
+		  </if>
+	</select>
+	 <select id="getUserList4" resultType="User">
+		SELECT * FROM smbms_user u
+		<where>
+		<if test="userName!=null and userName !=''">
+			 And u.userName LIKE CONCAT('%',#{userName},'%')	
+		 </if>
+		  <if test="userRole!=null and userRole!=''">
+		  		AND u.userRole=#{userRole}
+		  </if>
+		</where>
+	</select>
+	 <select id="getUserList5" resultType="User">
+		SELECT * FROM smbms_user u
+		<trim prefix="where" prefixOverrides="AND | OR">
+			<if test="userName!=null and userName !=''">
+		 		And u.userName LIKE CONCAT('%',#{userName},'%')	
+		 	</if>
+		  	<if test="userRole!=null">
+		  		And u.userRole=#{userRole}
+		  	</if>
+		</trim>
+	</select>
+	
 </mapper>

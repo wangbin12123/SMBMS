@@ -9,6 +9,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	<settings>
 		<!-- 配置log实现为LOG4J -->
 		<setting name="logImpl" value="LOG4J"></setting>
+		<!-- <setting name="autoMappingBehavior" value="PARTIAL"></setting> -->
 	</settings>
 	<typeAliases>
 		<!--  <typeAlias type="cn.three.smbms.pojo.User" alias="User"/> -->

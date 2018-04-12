@@ -5,7 +5,9 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.io.Resources;
@@ -17,7 +19,11 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import cn.three.smbms.dao.provider.ProviderMapper;
+import cn.three.smbms.dao.user.UserMapper;
+import cn.three.smbms.pojo.Address;
+import cn.three.smbms.pojo.Bill;
 import cn.three.smbms.pojo.Provider;
+import cn.three.smbms.pojo.User;
 import cn.three.smbms.utils.MyBatisUtil;
 
 
@@ -148,6 +154,137 @@ public class ProviderTest {
 			count = session.getMapper(ProviderMapper.class).delete1(id);
 			session.commit();
 			logger.debug("TestDeleteCount\t"+count);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			MyBatisUtil.closeSession(session);
+			session.rollback();
+		}
+	}
+	@Test
+	/**
+	 * 一对多测试
+	 */
+	public void TestgetProviderBillList() {
+		List<Provider> list = new ArrayList<Provider>();
+		SqlSession session = null;
+		try {
+			session = MyBatisUtil.createSession();
+			Integer providerid =1;
+			//list = session.selectList("cn.three.smbms.dao.provider.ProviderMapper.getBillListByProvider",providerid);
+			//使用接口方式实现查询
+			list = session.getMapper(ProviderMapper.class).getBillListByProvider(providerid);
+			for (Provider p : list) {
+				logger.debug("供应商id\t"+p.getId()+"\n"+"供应商编码\t"+p.getProCode()+"\n"+"供应商名字\t"+p.getProName()+"\n"+"供应商联系人\t"+p.getProContact()+"\n"+"供应商联系电话\t"+p.getProPhone());
+				for(Bill b : p.getBillList()) {
+					logger.debug("biilCode\t"+b.getBillCode()+"\n"+"productName\t"+b.getProductName()+"\n"+"totalPrice\t"+b.getTotalPrice()+"\n"+"isPayment\t"+b.getIsPayment());
+				}
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			MyBatisUtil.closeSession(session);
+			session.rollback();
+		}
+	}
+	@Test
+	//if-set修改数据测试
+	public void TestUpdate2() {
+		int count = 0;
+		SqlSession session = null;
+		try {
+			Provider provider = new Provider();
+			provider.setId(19);
+			provider.setProCode("re_re12306");
+			provider.setProName(null);
+			provider.setProDesc("主要生产玩具");
+			provider.setModifyBy(1);
+			Date modifyDate =new Date();
+			provider.setModifyDate(modifyDate);
+			session = MyBatisUtil.createSession();
+			//count = session.update("cn.three.smbms.dao.provider.ProviderMapper.update1",provider);	
+			count = session.getMapper(ProviderMapper.class).update2(provider);
+			session.commit();
+			logger.debug("TestUpdateCount\t"+count);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			MyBatisUtil.closeSession(session);
+			session.rollback();
+		}
+	}
+	@Test
+	/**
+	 * 使用foreach array实现供应商下的订单列表信息
+	 */
+	public void Testarray1() {
+		List<Provider> list = new ArrayList<Provider>();
+		SqlSession session = null;
+		try {
+			session = MyBatisUtil.createSession();
+			Integer[] providerIds = {1,3};
+			list = session.getMapper(ProviderMapper.class).getBillList_array(providerIds);
+			for (Provider provider : list) {
+				logger.debug("proName\t"+provider.getProName()+"proCode\t"+provider.getProCode());
+				for(Bill b : provider.getBillList()) {
+					logger.debug("billCode\t"+b.getBillCode()+"productName\t"+b.getProductName()+"proDesc\t"+b.getProductDesc());
+				}
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			MyBatisUtil.closeSession(session);
+			session.rollback();
+		}
+	}
+	@Test
+	/**
+	 * 使用foreach list实现供应商下的订单列表信息
+	 */
+	public void TestList1() {
+		List<Provider> list = new ArrayList<Provider>();
+		SqlSession session = null;
+		try {
+			session = MyBatisUtil.createSession();
+			List<Integer> plist = new ArrayList<Integer>();
+			plist.add(6);
+			plist.add(7);
+			list = session.getMapper(ProviderMapper.class).getBillList_List(plist);
+			for (Provider provider : list) {
+				logger.debug("proName\t"+provider.getProName()+"proCode\t"+provider.getProCode());
+				for(Bill b : provider.getBillList()) {
+					logger.debug("billCode\t"+b.getBillCode()+"productName\t"+b.getProductName()+"proDesc\t"+b.getProductDesc());
+				}
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			MyBatisUtil.closeSession(session);
+			session.rollback();
+		}
+	}
+	@Test
+	/**
+	 * 使用foreach map实现供应商下的订单列表信息
+	 */
+	public void Testmap1() {
+		List<Provider> list = new ArrayList<Provider>();
+		SqlSession session = null;
+		try {
+			session = MyBatisUtil.createSession();
+			Map<String,Object> map = new HashMap<String,Object>();
+			List<Integer> plist = new ArrayList<Integer>();
+			plist.add(6);
+			plist.add(7);
+			map.put("proCode","BJ_GYS002");
+			map.put("billList", plist);
+			list = session.getMapper(ProviderMapper.class).getBillList_Map(map);
+			for (Provider provider : list) {
+				logger.debug("proName\t"+provider.getProName()+"proCode\t"+provider.getProCode());
+				for(Bill b : provider.getBillList()) {
+					logger.debug("billCode\t"+b.getBillCode()+"productName\t"+b.getProductName()+"proDesc\t"+b.getProductDesc());
+				}
+			}
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {

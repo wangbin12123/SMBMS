@@ -17,6 +17,7 @@ import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import cn.three.smbms.dao.user.UserMapper;
+import cn.three.smbms.pojo.Address;
 import cn.three.smbms.pojo.User;
 import cn.three.smbms.utils.MyBatisUtil;
 
@@ -299,6 +300,180 @@ public class UserTest {
 			session.commit();
 			for (User user2 : list) {
 				logger.debug("userCode\t"+user2.getUserCode()+"\tuserName\t"+user2.getUserName()+"\tuserRole\t"+user2.getUserRole()+"\troleName\t"+user2.getRole().getRoleName()+"\t角色编码"+user2.getRole().getRoleCode());
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			MyBatisUtil.closeSession(session);
+			session.rollback();
+		}
+	}
+	@Test
+	//一对多测试
+	public void TestList12() {
+		List<User> list = new ArrayList<User>();
+		SqlSession session = null;
+		try {
+			session = MyBatisUtil.createSession();
+			Integer userid =1;
+			list = session.selectList("cn.three.smbms.dao.user.UserMapper.getAddressListByUser",userid);
+			//使用接口方式实现查询
+			//list = session.getMapper(UserMapper.class).getAddressListByUser(userid);
+			session.commit();
+			for (User user2 : list) {
+				logger.debug("userCode\t"+user2.getUserCode()+"\tuserName\t"+user2.getUserName()+"userPassword\t"+user2.getUserPassword());
+				for(Address a : user2.getAddressList()) {
+					logger.debug("addressDesc\t"+a.getAddressDesc());
+				}
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			MyBatisUtil.closeSession(session);
+			session.rollback();
+		}
+	}
+	/*@Test
+	
+	public void TestList13() {
+		List<User> list = new ArrayList<User>();
+		SqlSession session = null;
+		try {
+			session = MyBatisUtil.createSession();
+			//list = session.selectList("cn.three.smbms.dao.user.UserMapper.getAddressListByUser",userid);
+			//使用接口方式实现查询
+			list = session.getMapper(UserMapper.class).getUserList3("",2);
+			for (User u : list) {
+				logger.debug("userName\t"+u.getUserName()+"userPassword\t"+u.getUserPassword()+"userRole\t"+u.getUserRole());
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			MyBatisUtil.closeSession(session);
+			session.rollback();
+		}
+	}*/
+	@Test
+	/**
+	 * if-where-trim
+	 */
+	public void TestList13() {
+		List<User> list = new ArrayList<User>();
+		SqlSession session = null;
+		try {
+			session = MyBatisUtil.createSession();
+			//使用接口方式实现查询
+			list = session.getMapper(UserMapper.class).getUserList5("孙",null);
+			for (User u : list) {
+				logger.debug("userName\t"+u.getUserName()+"userPassword\t"+u.getUserPassword()+"userRole\t"+u.getUserRole());
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			MyBatisUtil.closeSession(session);
+			session.rollback();
+		}
+	}
+	@Test
+	//if-set更新数据测试
+	public void TestList14() {
+		int count=0;
+		SqlSession session = null;
+		try {
+			session = MyBatisUtil.createSession();
+			User user = new User();
+			user.setId(24);
+			user.setUserCode("TestUpdate2");
+			//使用接口方式实现查询
+			count = session.getMapper(UserMapper.class).modify2(user);
+			session.commit();
+			logger.debug("updateCount\t\t"+count);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			MyBatisUtil.closeSession(session);
+			session.rollback();
+		}
+	}
+	@Test
+	//trim更新数据测试
+	public void TestList15() {
+		int count=0;
+		SqlSession session = null;
+		try {
+			session = MyBatisUtil.createSession();
+			User user = new User();
+			user.setId(25);
+			user.setUserCode("TestUpdate3");
+			//使用接口方式实现查询
+			count = session.getMapper(UserMapper.class).modify3(user);
+			session.commit();
+			logger.debug("updateCount\t\t"+count);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			MyBatisUtil.closeSession(session);
+			session.rollback();
+		}
+	}
+	@Test
+	//foreach list集合查询
+	public void TestList16() {
+		List<User> list = new ArrayList<User>();
+		SqlSession session = null;
+		try {
+			session = MyBatisUtil.createSession();
+			List<Integer> rlist = new ArrayList<Integer>();
+			rlist.add(2);
+			rlist.add(3);
+			list= session.getMapper(UserMapper.class).getUserListByRole_list(rlist);
+			for (User u : list) {
+				logger.debug("UserName\t"+u.getUserName()+"userCode"+u.getUserCode());
+			}
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			MyBatisUtil.closeSession(session);
+			session.rollback();
+		}
+	}
+	@Test
+	//foreach array数组查询
+	public void TestList17() {
+		List<User> list = new ArrayList<User>();
+		SqlSession session = null;
+		try {
+			session = MyBatisUtil.createSession();
+			Integer[] aee = {2,3}; 
+			list= session.getMapper(UserMapper.class).getUserListByRole_array(aee);
+			for (User u : list) {
+				logger.debug("UserName\t"+u.getUserName()+"userCode"+u.getUserCode());
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			MyBatisUtil.closeSession(session);
+			session.rollback();
+		}
+	}
+	@Test
+	//foreach map集合查询
+	public void TestList18() {
+		List<User> list = new ArrayList<User>();
+		SqlSession session = null;
+		try {
+			session = MyBatisUtil.createSession();
+			Map<String,Object> map = new HashMap<String,Object>();
+			List<Integer> rlist = new ArrayList<Integer>();
+			rlist.add(2);
+ 			rlist.add(3);
+ 			map.put("gender",1);
+ 			map.put("roleList",rlist);
+ 			//map.put("rlist",rlist);//单参数也可以封装map
+			list= session.getMapper(UserMapper.class).getUserListByRole_map(map);
+			for (User u : list) {
+				logger.debug("UserName\t"+u.getUserName()+"userCode"+u.getUserCode());
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
