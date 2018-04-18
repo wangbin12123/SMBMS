@@ -1,5 +1,6 @@
 package cn.three.smbms.dao.user;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -39,4 +40,11 @@ public interface UserMapper {
 	public List<User> getUserListByRole_list(List<Integer> roleList);
 	//foreach map
 	public List<User> getUserListByRole_map(Map<String,Object> map);
+	//choose
+	public List<User> getUserList_choose(@Param("userName")String userName,
+										 @Param("userRole")Integer userRole,
+										 @Param("userCode")String userCode,
+										 @Param("creationDate")Date creationDate);
+	//·ÖÒ³
+	public List<User> getUserList_page(@Param("from")Integer from,@Param("pageSize")Integer pageSize);;
 }

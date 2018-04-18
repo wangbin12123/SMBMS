@@ -18,7 +18,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<id property="id" column="id"/>
 		<result property="userCode" column="userCode"/>
 		<result property="userName" column="userName"/>
-		<result property="userRole" column="userRole"></result>
+		<result property="userRole" column="userRole"/>
+		<result property="creationDate" column="creationDate"/>
 		<association property="role" javaType="Role"><!-- Role用了别名 -->
 			<id property="id" column="r_id"/>
 			<result property="roleCode" column="roleCode"/>
@@ -50,6 +51,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="id" column="id"></result>
 		<result property="userCode" column="userCode"></result>
 		<result property="userName" column="userName"></result>
+		<result property="creationDate" column="creationDate"/>
 	</resultMap>
 	<!-- foreach -->
 	<select id="getUserListByRole_array" resultMap="userRole">
@@ -176,5 +178,34 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		  	</if>
 		</trim>
 	</select>
-	
+	<!-- 多条件查询用户列表choose -->
+	<select id="getUserList_choose" resultType="User">
+		SELECT * FROM smbms_user u,smbms_role r
+		 WHERE 1 = 1 
+		<choose>
+			<when test="userName != null and userName !=''">
+				and u.userName LIKE CONCAT('%',#{userName},'%')
+			</when>
+			 <when test="userCode != null and userCode !=''">
+			 	 and u.userCode LIKE CONCAT('%',#{userCode},'%')
+			 </when>
+		 	<when test="userRole != null">
+			 	  AND u.userRole=#{userRole}
+			 </when>
+			<otherwise>
+				 and YEAR(u.creationDate) = YEAR(#{creationDate})
+			</otherwise>
+		</choose>
+	</select>
+	<!-- 查询用户列表分页显示 -->
+	<select id="getUserList_page" resultMap="userRoleList">
+		SELECT u.*,
+		r.id AS r_id,
+		r.roleName,
+		r.roleCode 
+		FROM
+		smbms_user u,smbms_role r 
+		WHERE u.userRole=r.id
+		order by u.creationDate DESC limit #{from},#{pageSize} <!-- form起始  pageSize 页面容量-->
+	</select>
 </mapper>

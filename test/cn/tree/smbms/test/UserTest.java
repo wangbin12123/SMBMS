@@ -482,4 +482,48 @@ public class UserTest {
 			session.rollback();
 		}
 	}
+	@Test
+	//foreach map集合查询
+	public void TestList19() {
+		List<User> list = new ArrayList<User>();
+		SqlSession session = null;
+		try {
+			session = MyBatisUtil.createSession();
+			String userName = "";
+			String userCode = "lu";
+			Integer userRole = 2;
+			Date creationDate = new SimpleDateFormat("yyyy-MM-dd").parse("2016-01-01");
+			list = session.getMapper(UserMapper.class).getUserList_choose(userName, userRole, userCode, creationDate);
+			for (User u : list) {
+				logger.debug("UserName\t"+u.getUserName()+"userCode"+u.getUserCode()
+				+"userRole\t"+u.getUserRole()+"\t"+"creationDate\t"+u.getCreationDate());
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			MyBatisUtil.closeSession(session);
+			session.rollback();
+		}
+	}
+	@Test
+	//分页查询
+	public void TestList20() {
+		List<User> list = new ArrayList<User>();
+		SqlSession session = null;
+		try {
+			session = MyBatisUtil.createSession();
+			Integer from = 0;
+			Integer pageSize = 5;
+			list = session.getMapper(UserMapper.class).getUserList_page(from, pageSize);
+			for (User u : list) {
+				logger.debug("userName\t"+u.getUserName()+"\t"+"userCode"+u.getUserCode()+"\t"
+				+"userRole\t"+u.getUserRole()+"\t"+"creationDate\t"+u.getCreationDate());
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			MyBatisUtil.closeSession(session);
+			session.rollback();
+		}
+	}
 }

@@ -80,4 +80,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			#{providerIds}
 		</foreach>
 	</select>
+	<select id="getProviderList_choose" resultType="Provider">
+		select * from smbms_provider p 
+		where 1 = 1
+		<choose>
+			<when test="proCode != null and proCode != ''">and p.proCode LIKE CONCAT ('%',#{proCode},'%')</when>
+			<when test="proName != null and proName != ''">and p.proName LIKE CONCAT ('%',#{proName},'%')</when>
+			<when test="proContact != null and proName != ''">and p.proContact LIKE CONCAT ('%',#{proContact},'%')</when>
+			<otherwise>and YEAR(p.creationDate) = YEAR(#{creationDate})</otherwise>
+		</choose>		 
+	</select>
 </mapper>

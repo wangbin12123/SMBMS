@@ -15,9 +15,11 @@ public interface ProviderMapper {
 	public int update2(Provider provider);
 	public int delete1(Integer id);
 	//使用注解传参
-	public int insert2(@Param("proCode")String proCode,@Param("proName")String proName,
-			@Param("proDesc")String proDesc,@Param("createdBy")Integer createdBy,
-			@Param("creationDate")Date creationDate);
+	public int insert2(@Param("proCode")String proCode,
+					   @Param("proName")String proName,
+					   @Param("proDesc")String proDesc,
+					   @Param("createdBy")Integer createdBy,
+					   @Param("creationDate")Date creationDate);
 	//一对多映射
 	public List<Provider> getBillListByProvider(Integer providerid);
 	//使用foreach array数组供应商下的订单列表信息
@@ -26,4 +28,9 @@ public interface ProviderMapper {
 	public List<Provider> getBillList_List(List<Integer> billList);
 	//使用foreach map集合供应商下的订单列表信息
 	public List<Provider> getBillList_Map(Map<String,Object> map);
+	//使用choose查询provider列表信息
+	public List<Provider> getProviderList_choose(@Param("proCode")String proCode,
+												 @Param("proName")String proName,
+												 @Param("proContact")String proContact,
+												 @Param("creationDate")Date creationDate);
 }

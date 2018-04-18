@@ -292,4 +292,32 @@ public class ProviderTest {
 			session.rollback();
 		}
 	}
+	@Test
+	/**
+	 * 使用foreach map实现供应商下的订单列表信息
+	 */
+	public void Testchoose() {
+		List<Provider> list = new ArrayList<Provider>();
+		SqlSession session = null;
+		try {
+			session = MyBatisUtil.createSession();
+			String proName = null;
+			String proCode = "";
+			String proContact = "王";
+			Date creationDate = new SimpleDateFormat("yyyy-MM-dd").parse("2013-03-22"); 
+			list = session.getMapper(ProviderMapper.class).getProviderList_choose(proCode, proName, proContact, creationDate);
+			for (Provider provider : list) {
+				logger.debug("proName\t"+provider.getProName()+"\t"
+							+"proCode\t"+provider.getProCode()+"\t"
+							+"proContact\t"+provider.getProContact()+"\t"
+							+"creationDate\t"+provider.getCreationDate()
+							);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			MyBatisUtil.closeSession(session);
+			session.rollback();
+		}
+	}
 }
